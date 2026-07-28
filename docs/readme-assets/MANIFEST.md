@@ -22,3 +22,9 @@ authenticated Higgsfield CLI.
 
 All three outputs were visually reviewed for unintended text, logos, watermarks,
 and obvious rendering defects before inclusion.
+
+## Derived social preview
+
+`social-preview.jpg` is a deterministic center crop of `workflow-hero.webp`,
+resized to GitHub's recommended `1280 × 640` social-preview canvas. Its SHA-256
+is `77f5d40a32d0f1212c93cb1d0fb8bc0bfdd68303c9d8fe34f166c8d169b27401`.
