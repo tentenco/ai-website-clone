@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blend References"
+  short_description: "Blend approved reference systems after baseline fidelity"
+  default_prompt: "Use $blend-references to combine approved design references with explicit provenance and boundaries."

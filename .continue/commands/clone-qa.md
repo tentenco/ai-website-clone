@@ -1,0 +1,105 @@
+---
+name: clone-qa
+description: "Verify a reconstructed website against its source with deterministic static, responsive, interaction, asset, motion, accessibility, reduced-motion, build, and runtime fidelity gates. Use when comparing a website clone to source capture scenarios, producing or validating qa/fidelity-report.json, triaging visual or behavioral discrepancies, checking dynamic-region masks, or deciding whether a baseline clone can enter adaptation or blending."
+invokable: true
+---
+<!-- AUTO-GENERATED from .claude/skills/clone-qa/SKILL.md. Do not edit directly. Run `node scripts/sync-skills.mjs` to regenerate. -->
+
+Canonical bundled resources live under `.claude/skills/clone-qa/`. Resolve relative scripts and references from that directory.
+
+
+# Clone QA
+
+Produce an evidence-backed fidelity decision. Replay approved source scenarios
+against the clone; do not replace source evidence with memory or weaken a frozen
+specification to make an implementation pass.
+
+## Inputs
+
+Read, in authority order:
+
+1. user scope and `docs/research/<target>/CLONE_CONTRACT.md`;
+2. `capture-scenarios.json` and source capture artifacts;
+3. frozen component, behavior, asset, and motion specifications;
+4. implementation and prior discrepancy records.
+
+Stop and mark the affected gate `blocked` if its scenario, acceptance threshold,
+source artifact, permission, or specification authority is missing. Preserve the
+evidence levels from `docs/research/EVIDENCE_MODEL.md`.
+
+## Workflow
+
+1. **Stabilize replay.** Pin viewport, device scale, locale, timezone, preferences,
+   data fixtures, fonts, decoded assets, readiness signal, scroll offsets, and input
+   schedule. Read [visual-diff-stabilization.md](references/visual-diff-stabilization.md).
+2. **Replay both sides.** Run each approved scenario against source and clone with
+   identical inputs. Persist source and clone artifacts immediately; never compare
+   unrelated states.
+3. **Check static and responsive states.** Compare dimensions first, then geometry,
+   typography, colors, asset identity/decode, visibility, stacking, and layout at
+   every contracted viewport.
+4. **Bound dynamic pixels.** Freeze dynamic content when possible. Otherwise use
+   the smallest reviewed `exclude` or `separate-review` mask. Read
+   [dynamic-regions.md](references/dynamic-regions.md). Masked pixels provide no
+   passing evidence.
+5. **Replay behavior.** Verify mouse, keyboard, touch, focus, scroll, time-driven,
+   loading, empty, and error states required by the contract. Compare normalized
+   interaction and motion checkpoints. Read
+   [motion-qa.md](references/motion-qa.md).
+6. **Check resilience.** Verify keyboard access, essential content without
+   animation, reduced-motion behavior, asset decode, lint, typecheck, build,
+   runtime routes, and public assets.
+7. **Triage discrepancies.** Classify each as `implementation-defect`,
+   `specification-defect`, `capture-defect`, `approved-difference`, or `unknown`.
+   Read [acceptance-triage.md](references/acceptance-triage.md). Fix an
+   implementation defect in the implementation. Correct a specification defect
+   only from stronger evidence and record its authority artifact. Never close a
+   discrepancy by relaxing the specification or tolerance.
+8. **Report and decide.** Write `docs/research/<target>/qa/fidelity-report.json`
+   against `docs/research/schemas/fidelity-report.schema.json`, validate it, and
+   generate `qa/FIDELITY_REPORT.md` from the same gate facts. `fail` outranks
+   `blocked`; `pass` requires every approved gate and all material discrepancies
+   resolved or explicitly accepted.
+
+Do not approve `adapt` or `blend` until the baseline `clone` report passes.
+
+## Deterministic tools
+
+Use contract tolerances, not post-hoc values.
+
+```bash
+node .claude/skills/clone-qa/scripts/compare-images.mjs \
+  source.png clone.png --threshold 0.01 \
+  --masks masks.json --diff diff.png --out image-result.json
+
+node .claude/skills/clone-qa/scripts/compare-checkpoints.mjs \
+  source-checkpoints.json clone-checkpoints.json \
+  --geometry-px 2 --timing-ms 100 --scroll-progress 0.02 \
+  --out checkpoint-result.json
+
+node .claude/skills/clone-qa/scripts/validate-fidelity-report.mjs \
+  docs/research/<target>/qa/fidelity-report.json
+
+node .claude/skills/clone-qa/scripts/summarize-gates.mjs \
+  docs/research/<target>/qa/fidelity-report.json \
+  --out docs/research/<target>/qa/gate-summary.json
+```
+
+The checkpoint comparator passes values exactly on the configured boundary and
+fails values above it. The image tool uses ImageMagick when available, otherwise
+`ffmpeg` plus `ffprobe`; absence of both is a blocked gate. All scripts use only
+Node built-ins and local executables. `summarize-gates.mjs` writes a valid summary
+and exits `1` when the summarized gates fail, are blocked, or are inconsistent;
+distinguish that acceptance result from exit `2`, which means the tool invocation
+or input itself failed.
+
+## Handoff
+
+Report:
+
+- source and clone scenario artifacts;
+- thresholds and adapters used;
+- pass, fail, and blocked gates by ID;
+- deliberate differences with approval provenance;
+- discrepancies with classification, severity, owner boundary, and replay proof;
+- final status and remaining evidence risks.

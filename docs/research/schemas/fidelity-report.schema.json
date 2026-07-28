@@ -1,0 +1,1325 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tenten.co/schemas/fidelity-report.schema.json",
+  "title": "Website clone fidelity report",
+  "description": "Evidence-backed static, responsive, interaction, asset, motion, accessibility, and runtime acceptance results for one clone target.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "target",
+    "tolerances",
+    "captureScenarios",
+    "staticCheckpoints",
+    "responsiveStates",
+    "interactions",
+    "motionCheckpoints",
+    "accessibility",
+    "buildRuntime",
+    "deliberateDifferences",
+    "discrepancies",
+    "evidence",
+    "final"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "target": {
+      "$ref": "#/$defs/target"
+    },
+    "tolerances": {
+      "$ref": "#/$defs/tolerances"
+    },
+    "captureScenarios": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/captureScenario"
+      }
+    },
+    "staticCheckpoints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/staticCheckpoint"
+      }
+    },
+    "responsiveStates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/responsiveState"
+      }
+    },
+    "interactions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/interaction"
+      }
+    },
+    "motionCheckpoints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/motionCheckpoint"
+      }
+    },
+    "accessibility": {
+      "$ref": "#/$defs/accessibility"
+    },
+    "buildRuntime": {
+      "$ref": "#/$defs/buildRuntime"
+    },
+    "deliberateDifferences": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/deliberateDifference"
+      }
+    },
+    "discrepancies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/discrepancy"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "final": {
+      "$ref": "#/$defs/final"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "gateStatus": {
+      "enum": [
+        "pass",
+        "fail",
+        "blocked"
+      ]
+    },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "deviceScaleFactor": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "orientation": {
+          "enum": [
+            "portrait",
+            "landscape"
+          ]
+        }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slug",
+        "mode",
+        "sourceUrl",
+        "cloneUrl",
+        "contractArtifact",
+        "generatedAt"
+      ],
+      "properties": {
+        "slug": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "mode": {
+          "enum": [
+            "clone",
+            "adapt",
+            "blend"
+          ]
+        },
+        "sourceUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "cloneUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "contractArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "commit": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "tolerances": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "geometryPx",
+        "timingMs",
+        "scrollProgress"
+      ],
+      "properties": {
+        "geometryPx": {
+          "type": "number",
+          "minimum": 0
+        },
+        "timingMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "scrollProgress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "imageMeanAbsoluteError": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "captureScenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "viewport",
+        "sourceArtifact",
+        "cloneArtifact",
+        "sourceCapturedAt",
+        "cloneCapturedAt",
+        "status",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "route": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "viewport": {
+          "$ref": "#/$defs/viewport"
+        },
+        "inputFixture": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sourceArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cloneArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sourceCapturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "cloneCapturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "evidenceIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "mask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "dynamicKind",
+        "coordinateSpace",
+        "geometry",
+        "reason",
+        "treatment",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "dynamicKind": {
+          "enum": [
+            "animation",
+            "cursor",
+            "live-media",
+            "network-content",
+            "personalized",
+            "timestamp",
+            "other"
+          ]
+        },
+        "coordinateSpace": {
+          "enum": [
+            "image-pixel",
+            "normalized"
+          ]
+        },
+        "geometry": {
+          "$ref": "#/$defs/rect"
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "treatment": {
+          "enum": [
+            "exclude",
+            "separate-review"
+          ]
+        },
+        "review": {
+          "$ref": "#/$defs/review"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "rect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "x": {
+          "type": "number",
+          "minimum": 0
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "notes",
+        "evidenceArtifact"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "notes": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "imageComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapter",
+        "dimensions",
+        "metric",
+        "comparablePixels",
+        "excludedPixels",
+        "excludedRatio",
+        "dynamicReviewStatus",
+        "maskedRegionIds",
+        "status"
+      ],
+      "properties": {
+        "adapter": {
+          "enum": [
+            "imagemagick",
+            "ffmpeg",
+            "external",
+            "manual"
+          ]
+        },
+        "dimensions": {
+          "$ref": "#/$defs/viewport"
+        },
+        "metric": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "value",
+            "threshold",
+            "status"
+          ],
+          "properties": {
+            "name": {
+              "enum": [
+                "normalized-mae",
+                "external"
+              ]
+            },
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "threshold": {
+              "type": "number",
+              "minimum": 0
+            },
+            "status": {
+              "$ref": "#/$defs/gateStatus"
+            }
+          }
+        },
+        "comparablePixels": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "excludedPixels": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "excludedRatio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "dynamicReviewStatus": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "maskedRegionIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "diffArtifact": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        }
+      }
+    },
+    "numericComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "selector",
+        "property",
+        "source",
+        "clone",
+        "delta",
+        "tolerance",
+        "unit",
+        "status",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "selector": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "property": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "source": {
+          "type": "number"
+        },
+        "clone": {
+          "type": "number"
+        },
+        "delta": {
+          "type": "number",
+          "minimum": 0
+        },
+        "tolerance": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "enum": [
+            "px",
+            "ms",
+            "normalized",
+            "ratio"
+          ]
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "valueComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "selector",
+        "property",
+        "source",
+        "clone",
+        "status",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "selector": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "property": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "source": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        "clone": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "assetComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "role",
+        "sourceArtifact",
+        "cloneArtifact",
+        "decodeStatus",
+        "status",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "role": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sourceArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cloneArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sourceHash": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cloneHash": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "decodeStatus": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "staticCheckpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "scenarioId",
+        "viewport",
+        "sourceArtifact",
+        "cloneArtifact",
+        "masks",
+        "geometry",
+        "typography",
+        "colors",
+        "assets",
+        "status",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "scenarioId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "viewport": {
+          "$ref": "#/$defs/viewport"
+        },
+        "sourceArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cloneArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "masks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mask"
+          }
+        },
+        "imageComparison": {
+          "$ref": "#/$defs/imageComparison"
+        },
+        "geometry": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/numericComparison"
+          }
+        },
+        "typography": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/valueComparison"
+          }
+        },
+        "colors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/valueComparison"
+          }
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assetComparison"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "responsiveState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "scenarioId",
+        "viewport",
+        "layoutState",
+        "geometry",
+        "visibility",
+        "status",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "scenarioId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "viewport": {
+          "$ref": "#/$defs/viewport"
+        },
+        "layoutState": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "geometry": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/numericComparison"
+          }
+        },
+        "visibility": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/valueComparison"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "checkpointDifference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "path",
+        "sourceValue",
+        "cloneValue",
+        "status"
+      ],
+      "properties": {
+        "domain": {
+          "enum": [
+            "checkpoint",
+            "geometry",
+            "timingMs",
+            "scrollProgress",
+            "state"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sourceValue": {},
+        "cloneValue": {},
+        "delta": {
+          "type": "number",
+          "minimum": 0
+        },
+        "tolerance": {
+          "type": "number",
+          "minimum": 0
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        }
+      }
+    },
+    "checkpointComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "comparisons",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "kind": {
+          "enum": [
+            "interaction",
+            "motion"
+          ]
+        },
+        "comparisons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/checkpointDifference"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        }
+      }
+    },
+    "interaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "scenarioId",
+        "trigger",
+        "sourceStateArtifact",
+        "cloneStateArtifact",
+        "checkpointComparisons",
+        "status",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "scenarioId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "trigger": {
+          "enum": [
+            "click",
+            "focus",
+            "hover",
+            "keyboard",
+            "scroll",
+            "time",
+            "touch"
+          ]
+        },
+        "sourceStateArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cloneStateArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "checkpointComparisons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/checkpointComparison"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "motionCheckpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "scenarioId",
+        "sourceArtifact",
+        "cloneArtifact",
+        "checkpointComparisons",
+        "humanReview",
+        "status",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "scenarioId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sourceArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cloneArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "checkpointComparisons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/checkpointComparison"
+          }
+        },
+        "humanReview": {
+          "$ref": "#/$defs/review"
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "simpleGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "status",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "label": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "checks",
+        "reducedMotion"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/simpleGate"
+          }
+        },
+        "reducedMotion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sourceBehavior",
+            "cloneBehavior",
+            "checks",
+            "status",
+            "evidenceIds"
+          ],
+          "properties": {
+            "sourceBehavior": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "cloneBehavior": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/simpleGate"
+              }
+            },
+            "status": {
+              "$ref": "#/$defs/gateStatus"
+            },
+            "evidenceIds": {
+              "$ref": "#/$defs/evidenceIds"
+            }
+          }
+        }
+      }
+    },
+    "buildRuntimeGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "category",
+        "status",
+        "evidenceArtifact"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "category": {
+          "enum": [
+            "asset-decode",
+            "build",
+            "lint",
+            "runtime",
+            "typecheck",
+            "other"
+          ]
+        },
+        "command": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "route": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "evidenceArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "buildRuntime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "gates"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "gates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/buildRuntimeGate"
+          }
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "approvedAt",
+        "artifact"
+      ],
+      "properties": {
+        "authority": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "approvedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "artifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "deliberateDifference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "scope",
+        "description",
+        "status",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "scope": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "status": {
+          "enum": [
+            "approved",
+            "unapproved"
+          ]
+        },
+        "approval": {
+          "$ref": "#/$defs/approval"
+        },
+        "affectedGateIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "notes",
+        "evidenceIds"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "accepted-deliberate-difference",
+            "capture-replay",
+            "implementation-fix",
+            "specification-correction"
+          ]
+        },
+        "notes": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "authorityArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "discrepancy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "classification",
+        "severity",
+        "status",
+        "description",
+        "affectedGateIds",
+        "evidenceIds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "title": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "classification": {
+          "enum": [
+            "approved-difference",
+            "capture-defect",
+            "implementation-defect",
+            "specification-defect",
+            "unknown"
+          ]
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "major",
+            "minor",
+            "info"
+          ]
+        },
+        "status": {
+          "enum": [
+            "accepted",
+            "blocked",
+            "open",
+            "resolved"
+          ]
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "affectedGateIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "resolution": {
+          "$ref": "#/$defs/resolution"
+        },
+        "evidenceIds": {
+          "$ref": "#/$defs/evidenceIds"
+        }
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "value": {
+          "type": [
+            "number",
+            "string",
+            "boolean"
+          ]
+        },
+        "unit": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "level",
+        "claim",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "level": {
+          "enum": [
+            "invented",
+            "inferred",
+            "measured",
+            "observed"
+          ]
+        },
+        "claim": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "url",
+            "capturedAt",
+            "scenario",
+            "artifact"
+          ],
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "capturedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "viewport": {
+              "$ref": "#/$defs/viewport"
+            },
+            "scenario": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "selector": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "artifact": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          }
+        },
+        "measurement": {
+          "$ref": "#/$defs/measurement"
+        },
+        "relatedGateIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      }
+    },
+    "final": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "rationale"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "rationale": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pass",
+            "fail",
+            "blocked"
+          ],
+          "properties": {
+            "pass": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "fail": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "blocked": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "summaryArtifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,297 @@
+{
+  "$schema": "../../../../docs/research/schemas/fidelity-report.schema.json",
+  "schemaVersion": "1.0.0",
+  "target": {
+    "slug": "example",
+    "mode": "clone",
+    "sourceUrl": "https://example.com/",
+    "cloneUrl": "http://localhost:3000/",
+    "contractArtifact": "docs/research/example/CLONE_CONTRACT.md",
+    "generatedAt": "2026-07-29T00:00:00.000Z",
+    "commit": "0123456789abcdef"
+  },
+  "tolerances": {
+    "geometryPx": 2,
+    "timingMs": 100,
+    "scrollProgress": 0.02,
+    "imageMeanAbsoluteError": 0.01
+  },
+  "captureScenarios": [
+    {
+      "id": "scenario-desktop",
+      "route": "/",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "orientation": "landscape"
+      },
+      "inputFixture": "docs/research/example/fixtures/default.json",
+      "sourceArtifact": "docs/design-references/example/source-desktop.png",
+      "cloneArtifact": "docs/design-references/example/clone-desktop.png",
+      "sourceCapturedAt": "2026-07-29T00:00:00.000Z",
+      "cloneCapturedAt": "2026-07-29T00:01:00.000Z",
+      "status": "pass",
+      "evidenceIds": [
+        "evidence-desktop"
+      ]
+    }
+  ],
+  "staticCheckpoints": [
+    {
+      "id": "static-hero",
+      "scenarioId": "scenario-desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sourceArtifact": "docs/design-references/example/source-desktop.png",
+      "cloneArtifact": "docs/design-references/example/clone-desktop.png",
+      "masks": [],
+      "imageComparison": {
+        "adapter": "imagemagick",
+        "dimensions": {
+          "width": 1440,
+          "height": 900
+        },
+        "metric": {
+          "name": "normalized-mae",
+          "value": 0.005,
+          "threshold": 0.01,
+          "status": "pass"
+        },
+        "comparablePixels": 1296000,
+        "excludedPixels": 0,
+        "excludedRatio": 0,
+        "dynamicReviewStatus": "pass",
+        "maskedRegionIds": [],
+        "diffArtifact": "docs/design-references/example/diff-desktop.png",
+        "status": "pass"
+      },
+      "geometry": [
+        {
+          "id": "geometry-hero",
+          "selector": "[data-hero]",
+          "property": "height",
+          "source": 600,
+          "clone": 601,
+          "delta": 1,
+          "tolerance": 2,
+          "unit": "px",
+          "status": "pass",
+          "evidenceIds": [
+            "evidence-desktop"
+          ]
+        }
+      ],
+      "typography": [
+        {
+          "id": "type-hero",
+          "selector": "h1",
+          "property": "font-family",
+          "source": "Inter",
+          "clone": "Inter",
+          "status": "pass",
+          "evidenceIds": [
+            "evidence-desktop"
+          ]
+        }
+      ],
+      "colors": [
+        {
+          "id": "color-hero",
+          "selector": "h1",
+          "property": "color",
+          "source": "rgb(0, 0, 0)",
+          "clone": "rgb(0, 0, 0)",
+          "status": "pass",
+          "evidenceIds": [
+            "evidence-desktop"
+          ]
+        }
+      ],
+      "assets": [
+        {
+          "id": "asset-logo",
+          "role": "brand logo",
+          "sourceArtifact": "docs/design-references/example/source-logo.svg",
+          "cloneArtifact": "public/images/logo.svg",
+          "sourceHash": "sha256:source",
+          "cloneHash": "sha256:source",
+          "decodeStatus": "pass",
+          "status": "pass",
+          "evidenceIds": [
+            "evidence-desktop"
+          ]
+        }
+      ],
+      "status": "pass",
+      "evidenceIds": [
+        "evidence-desktop"
+      ]
+    }
+  ],
+  "responsiveStates": [
+    {
+      "id": "responsive-desktop",
+      "scenarioId": "scenario-desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "layoutState": "desktop two-column hero",
+      "geometry": [],
+      "visibility": [],
+      "status": "pass",
+      "evidenceIds": [
+        "evidence-desktop"
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "id": "interaction-menu",
+      "scenarioId": "scenario-desktop",
+      "trigger": "click",
+      "sourceStateArtifact": "docs/design-references/example/source-menu.json",
+      "cloneStateArtifact": "docs/design-references/example/clone-menu.json",
+      "checkpointComparisons": [
+        {
+          "id": "menu-open",
+          "kind": "interaction",
+          "comparisons": [
+            {
+              "domain": "state",
+              "path": "ariaExpanded",
+              "sourceValue": true,
+              "cloneValue": true,
+              "status": "pass"
+            }
+          ],
+          "status": "pass"
+        }
+      ],
+      "status": "pass",
+      "evidenceIds": [
+        "evidence-desktop"
+      ]
+    }
+  ],
+  "motionCheckpoints": [
+    {
+      "id": "motion-hero",
+      "scenarioId": "scenario-desktop",
+      "sourceArtifact": "docs/design-references/example/source-motion.mp4",
+      "cloneArtifact": "docs/design-references/example/clone-motion.mp4",
+      "checkpointComparisons": [
+        {
+          "id": "hero-midpoint",
+          "kind": "motion",
+          "comparisons": [
+            {
+              "domain": "scrollProgress",
+              "path": "hero",
+              "sourceValue": 0.5,
+              "cloneValue": 0.51,
+              "delta": 0.01,
+              "tolerance": 0.02,
+              "status": "pass"
+            }
+          ],
+          "status": "pass"
+        }
+      ],
+      "humanReview": {
+        "status": "pass",
+        "notes": "Trajectory and easing match the source recording.",
+        "evidenceArtifact": "docs/research/example/qa/motion-review.md"
+      },
+      "status": "pass",
+      "evidenceIds": [
+        "evidence-desktop"
+      ]
+    }
+  ],
+  "accessibility": {
+    "status": "pass",
+    "checks": [
+      {
+        "id": "a11y-keyboard",
+        "label": "Essential interactions work by keyboard",
+        "status": "pass",
+        "evidenceIds": [
+          "evidence-desktop"
+        ]
+      }
+    ],
+    "reducedMotion": {
+      "sourceBehavior": "Non-essential motion is disabled.",
+      "cloneBehavior": "Non-essential motion is disabled.",
+      "checks": [
+        {
+          "id": "a11y-reduced-essential",
+          "label": "Essential content remains available",
+          "status": "pass",
+          "evidenceIds": [
+            "evidence-desktop"
+          ]
+        }
+      ],
+      "status": "pass",
+      "evidenceIds": [
+        "evidence-desktop"
+      ]
+    }
+  },
+  "buildRuntime": {
+    "status": "pass",
+    "gates": [
+      {
+        "id": "build-production",
+        "category": "build",
+        "command": "npm run build",
+        "status": "pass",
+        "evidenceArtifact": "docs/research/example/qa/build.log"
+      }
+    ]
+  },
+  "deliberateDifferences": [],
+  "discrepancies": [],
+  "evidence": [
+    {
+      "id": "evidence-desktop",
+      "level": "measured",
+      "claim": "The desktop source and clone scenarios were replayed with identical inputs.",
+      "source": {
+        "url": "https://example.com/",
+        "capturedAt": "2026-07-29T00:00:00.000Z",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "scenario": "scenario-desktop",
+        "artifact": "docs/design-references/example/source-desktop.png"
+      },
+      "measurement": {
+        "name": "heroHeight",
+        "value": 600,
+        "unit": "px"
+      },
+      "relatedGateIds": [
+        "static-hero"
+      ]
+    }
+  ],
+  "final": {
+    "status": "pass",
+    "rationale": [
+      "All approved gates pass and no material discrepancies remain."
+    ],
+    "counts": {
+      "pass": 11,
+      "fail": 0,
+      "blocked": 0
+    },
+    "summaryArtifact": "docs/research/example/qa/FIDELITY_REPORT.md"
+  }
+}

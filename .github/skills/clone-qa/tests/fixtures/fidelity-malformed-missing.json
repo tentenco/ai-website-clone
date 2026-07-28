@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0.0",
+  "target": {
+    "slug": "broken"
+  },
+  "final": {
+    "status": "pass",
+    "rationale": [
+      "This fixture is intentionally malformed."
+    ]
+  }
+}

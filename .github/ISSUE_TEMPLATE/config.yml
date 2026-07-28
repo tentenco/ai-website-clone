@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and workflow support
+    url: https://github.com/tentenco/ai-website-clone/discussions/categories/q-a
+    about: Ask the community before opening a support issue
+  - name: Security vulnerability
+    url: https://github.com/tentenco/ai-website-clone/security/advisories/new
+    about: Report security-sensitive findings privately

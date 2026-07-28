@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inspect Site"
+  short_description: "Capture measured website structure, states, and assets"
+  default_prompt: "Use $inspect-site to inspect this website and create auditable research artifacts."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audit Motion"
+  short_description: "Measure video, scroll, parallax, and WebGL motion"
+  default_prompt: "Use $audit-motion to analyze this reference motion and produce a measured motion manifest."

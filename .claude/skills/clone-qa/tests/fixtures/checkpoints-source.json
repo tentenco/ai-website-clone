@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "scenarioId": "desktop-motion",
+  "checkpoints": [
+    {
+      "id": "hero-midpoint",
+      "kind": "motion",
+      "geometry": {
+        "hero": {
+          "x": 100,
+          "translateY": -40
+        }
+      },
+      "timingMs": {
+        "elapsed": 800
+      },
+      "scrollProgress": {
+        "page": 0.5
+      },
+      "state": {
+        "phase": "compressed",
+        "visible": true
+      }
+    }
+  ]
+}

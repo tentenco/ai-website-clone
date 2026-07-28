@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clone Website"
+  short_description: "Evidence-driven website reconstruction and fidelity QA"
+  default_prompt: "Use $clone-website to reconstruct this website from measured visual, interaction, asset, and motion evidence."

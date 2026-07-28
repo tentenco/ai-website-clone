@@ -1,0 +1,98 @@
+{
+  "$schema": "../schemas/capture-scenarios.schema.json",
+  "schemaVersion": "1.0.0",
+  "target": "example-store",
+  "source": {
+    "url": "https://example.com",
+    "routes": [
+      "/",
+      "/products"
+    ]
+  },
+  "createdAt": "2026-07-29T00:00:00.000Z",
+  "updatedAt": "2026-07-29T01:10:00.000Z",
+  "scenarios": [
+    {
+      "id": "desktop-initial",
+      "route": "/products",
+      "family": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 2,
+        "reducedMotion": "no-preference",
+        "colorScheme": "light",
+        "hasTouch": false
+      },
+      "states": [
+        "initial"
+      ],
+      "preconditions": [
+        "Clear site storage",
+        "Install browser-telemetry-init.js before navigation"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "navigate",
+          "value": "https://example.com/products",
+          "waitFor": "network-idle",
+          "timeoutMs": 15000,
+          "checkpoint": true
+        },
+        {
+          "id": "run-probe",
+          "action": "probe",
+          "checkpoint": true
+        }
+      ],
+      "captures": [
+        {
+          "id": "initial-screen",
+          "kind": "screenshot",
+          "path": "docs/design-references/example-store/desktop-initial/initial.png",
+          "afterStep": "open-route"
+        },
+        {
+          "id": "initial-probe",
+          "kind": "domProbe",
+          "path": "docs/research/example-store/captures/desktop-initial.json",
+          "afterStep": "run-probe"
+        }
+      ],
+      "status": "captured",
+      "capturedAt": "2026-07-29T01:02:03.000Z",
+      "resume": {
+        "completedStepIds": [
+          "open-route",
+          "run-probe"
+        ],
+        "nextStepId": null,
+        "checkpointArtifact": "docs/research/example-store/captures/desktop-initial.json"
+      },
+      "attempts": [
+        {
+          "adapter": "agent-browser@0.33.0",
+          "startedAt": "2026-07-29T01:00:00.000Z",
+          "endedAt": "2026-07-29T01:02:03.000Z",
+          "status": "captured",
+          "completedStepIds": [
+            "open-route",
+            "run-probe"
+          ],
+          "artifactPaths": [
+            "docs/research/example-store/captures/desktop-initial.json"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "level": "observed",
+          "claim": "The product page opens with a full-width hero."
+        }
+      ],
+      "unknowns": []
+    }
+  ],
+  "unknowns": []
+}

@@ -1,0 +1,113 @@
+name: Bug report
+description: Report a reproducible defect in the engine, a skill, or the scaffold
+title: "[Bug]: "
+labels:
+  - bug
+  - "status: needs-triage"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the project. Remove credentials, cookies,
+        private URLs, client data, and unlicensed assets before submitting.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Clone orchestration
+        - Site inspection
+        - Motion audit
+        - Fidelity QA
+        - Reference blending
+        - Skill synchronization
+        - Next.js scaffold
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Defect
+      description: Describe what is wrong and why it matters.
+      placeholder: A concise description of the failure.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Provide the smallest deterministic sequence that reproduces the problem.
+      placeholder: |
+        1. Run `npm run preflight`
+        2. Initialize a target with ...
+        3. Run `/inspect-site ...`
+        4. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: Include sanitized error output and the failing artifact path when possible.
+    validations:
+      required: true
+
+  - type: input
+    id: commit
+    attributes:
+      label: Commit or version
+      placeholder: v0.1.0 or a commit SHA
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node.js version, browser adapter and version, and agent platform.
+      placeholder: macOS 15, Node 24.14.1, agent-browser 0.33.0, Codex
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Workflow mode
+      options:
+        - clone
+        - adapt
+        - blend
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence
+      description: Attach minimal screenshots, manifests, reports, or logs that are safe to publish.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched for an existing issue.
+          required: true
+        - label: I removed secrets, personal data, private URLs, and client-confidential material.
+          required: true
+        - label: This is not a security vulnerability.
+          required: true

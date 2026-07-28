@@ -1,0 +1,602 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.website-clone/schemas/site-inspection.schema.json",
+  "title": "Website inspection artifact",
+  "description": "Aggregated, scenario-scoped evidence captured from one website target.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "target",
+    "captures",
+    "findings",
+    "unknowns"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "target": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "captures": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/capture"
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/unknown"
+      }
+    }
+  },
+  "$defs": {
+    "evidenceLevel": {
+      "enum": [
+        "measured",
+        "observed",
+        "inferred",
+        "invented"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "route": {
+          "type": "string"
+        },
+        "referrer": {
+          "type": "string"
+        },
+        "artifact": {
+          "type": "string"
+        }
+      }
+    },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height",
+        "deviceScaleFactor",
+        "reducedMotion",
+        "colorScheme",
+        "hasTouch"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "deviceScaleFactor": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "orientation": {
+          "enum": [
+            "portrait",
+            "landscape"
+          ]
+        },
+        "reducedMotion": {
+          "enum": [
+            "no-preference",
+            "reduce"
+          ]
+        },
+        "colorScheme": {
+          "enum": [
+            "light",
+            "dark",
+            "no-preference"
+          ]
+        },
+        "hasTouch": {
+          "type": "boolean"
+        }
+      }
+    },
+    "rect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0
+        },
+        "height": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "pseudo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "style"
+      ],
+      "properties": {
+        "style": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "parent",
+        "selector",
+        "tag",
+        "attributes",
+        "text",
+        "rect",
+        "visible",
+        "style"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parent": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "selector": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tag": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "text": {
+          "type": "string"
+        },
+        "rect": {
+          "$ref": "#/$defs/rect"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "style": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pseudo": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "before": {
+              "$ref": "#/$defs/pseudo"
+            },
+            "after": {
+              "$ref": "#/$defs/pseudo"
+            }
+          }
+        },
+        "shadowRoot": {
+          "enum": [
+            "open",
+            "closed"
+          ]
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selector",
+        "values"
+      ],
+      "properties": {
+        "selector": {
+          "type": "string",
+          "minLength": 1
+        },
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "image",
+            "pictureSource",
+            "video",
+            "audio",
+            "mediaSource",
+            "track",
+            "cssUrl",
+            "lottie",
+            "rive",
+            "animationData",
+            "canvas",
+            "webgl",
+            "font",
+            "manifest",
+            "iframe"
+          ]
+        },
+        "selector": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "level": {
+          "$ref": "#/$defs/evidenceLevel"
+        }
+      }
+    },
+    "unknown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "question",
+        "impact",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "impact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "open",
+            "accepted",
+            "resolved"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/evidenceSource"
+        },
+        "resolution": {
+          "type": "string"
+        }
+      }
+    },
+    "evidenceSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "capturedAt",
+        "viewport",
+        "scenario"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "viewport": {
+          "$ref": "#/$defs/viewport"
+        },
+        "scenario": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selector": {
+          "type": "string"
+        },
+        "artifact": {
+          "type": "string"
+        }
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": [
+            "number",
+            "string",
+            "boolean"
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "level",
+        "claim",
+        "source"
+      ],
+      "properties": {
+        "level": {
+          "$ref": "#/$defs/evidenceLevel"
+        },
+        "claim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "$ref": "#/$defs/evidenceSource"
+        },
+        "measurement": {
+          "$ref": "#/$defs/measurement"
+        },
+        "implementationReading": {
+          "type": "string"
+        }
+      }
+    },
+    "resourceTiming": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "name",
+        "initiatorType"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "initiatorType": {
+          "type": "string"
+        }
+      }
+    },
+    "telemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scroll",
+        "resources",
+        "animations",
+        "media",
+        "canvas",
+        "webgl"
+      ],
+      "properties": {
+        "scroll": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resourceTiming"
+          }
+        },
+        "animations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "media": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "canvas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "webgl": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "capture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "adapter",
+        "source",
+        "capturedAt",
+        "viewport",
+        "scenario",
+        "evidenceLevel",
+        "styleProperties",
+        "document",
+        "breakpoints",
+        "nodes",
+        "states",
+        "assets",
+        "telemetry",
+        "unknowns"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0.0"
+        },
+        "adapter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "viewport": {
+          "$ref": "#/$defs/viewport"
+        },
+        "scenario": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceLevel": {
+          "$ref": "#/$defs/evidenceLevel"
+        },
+        "styleProperties": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "document": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "breakpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "query",
+              "matches"
+            ],
+            "properties": {
+              "query": {
+                "type": "string",
+                "minLength": 1
+              },
+              "matches": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/state"
+          }
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/asset"
+          }
+        },
+        "telemetry": {
+          "$ref": "#/$defs/telemetry"
+        },
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unknown"
+          }
+        }
+      }
+    }
+  }
+}

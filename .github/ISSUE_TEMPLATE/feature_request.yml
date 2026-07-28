@@ -1,0 +1,77 @@
+name: Feature proposal
+description: Propose a bounded capability or workflow improvement
+title: "[Feature]: "
+labels:
+  - enhancement
+  - "status: needs-triage"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Start with the problem and evidence. Open-ended design discussion belongs
+        in GitHub Discussions before implementation.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Clone orchestration
+        - Site inspection
+        - Motion audit
+        - Fidelity QA
+        - Reference blending
+        - Agent Harness
+        - Platform integration
+        - Next.js scaffold
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What concrete workflow or user outcome is currently blocked?
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or examples
+      description: Link public examples or provide sanitized artifacts that demonstrate the gap.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed capability
+      description: Describe inputs, outputs, evidence boundaries, and acceptance gates.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and compatibility
+      description: Note affected skills, schemas, platforms, and breaking-change risk.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Proposal checks
+      options:
+        - label: I searched issues and discussions for prior work.
+          required: true
+        - label: The proposal does not depend on private or unlicensed source material.
+          required: true

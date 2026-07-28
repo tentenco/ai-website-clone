@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clone QA"
+  short_description: "Verify visual, responsive, interaction, and motion fidelity"
+  default_prompt: "Use $clone-qa to compare this clone with its source and produce an evidence-backed fidelity report."

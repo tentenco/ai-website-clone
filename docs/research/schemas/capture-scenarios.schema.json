@@ -1,0 +1,458 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.website-clone/schemas/capture-scenarios.schema.json",
+  "title": "Website inspection capture scenarios",
+  "description": "Small, deterministic, resumable browser scenarios for one website target.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "target",
+    "source",
+    "createdAt",
+    "updatedAt",
+    "scenarios",
+    "unknowns"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "target": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/scenario"
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/unknown"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "routes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height",
+        "deviceScaleFactor",
+        "reducedMotion",
+        "colorScheme",
+        "hasTouch"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "deviceScaleFactor": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "reducedMotion": {
+          "enum": [
+            "no-preference",
+            "reduce"
+          ]
+        },
+        "colorScheme": {
+          "enum": [
+            "light",
+            "dark",
+            "no-preference"
+          ]
+        },
+        "hasTouch": {
+          "type": "boolean"
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "action"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "action": {
+          "enum": [
+            "navigate",
+            "reload",
+            "scroll",
+            "scrollTo",
+            "click",
+            "hover",
+            "focus",
+            "blur",
+            "key",
+            "type",
+            "select",
+            "wait",
+            "assert",
+            "playMedia",
+            "pauseMedia",
+            "screenshot",
+            "probe",
+            "custom"
+          ]
+        },
+        "target": {
+          "type": "string"
+        },
+        "value": {},
+        "waitFor": {
+          "type": "string"
+        },
+        "timeoutMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "checkpoint": {
+          "type": "boolean"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "capture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "path"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "kind": {
+          "enum": [
+            "screenshot",
+            "fullPageScreenshot",
+            "domProbe",
+            "video",
+            "network",
+            "trace",
+            "mediaMetadata",
+            "canvasTelemetry",
+            "webglTelemetry"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "afterStep": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "startedAt",
+        "adapter",
+        "status",
+        "completedStepIds",
+        "artifactPaths"
+      ],
+      "properties": {
+        "adapter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "status": {
+          "enum": [
+            "in_progress",
+            "captured",
+            "blocked",
+            "failed"
+          ]
+        },
+        "completedStepIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "artifactPaths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "error": {
+          "type": "string"
+        }
+      }
+    },
+    "resume": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "completedStepIds"
+      ],
+      "properties": {
+        "completedStepIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "nextStepId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "checkpointArtifact": {
+          "type": "string"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "level",
+        "claim"
+      ],
+      "properties": {
+        "level": {
+          "enum": [
+            "measured",
+            "observed",
+            "inferred",
+            "invented"
+          ]
+        },
+        "claim": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "unknown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "question",
+        "impact",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "impact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "open",
+            "accepted",
+            "resolved"
+          ]
+        },
+        "resolution": {
+          "type": "string"
+        }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "route",
+        "family",
+        "viewport",
+        "states",
+        "preconditions",
+        "steps",
+        "captures",
+        "status",
+        "capturedAt",
+        "resume",
+        "attempts",
+        "evidence",
+        "unknowns"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "route": {
+          "type": "string",
+          "minLength": 1
+        },
+        "family": {
+          "enum": [
+            "initial",
+            "full-page",
+            "scroll",
+            "navigation",
+            "interaction",
+            "hover-focus",
+            "loading-empty-error",
+            "reduced-motion",
+            "media",
+            "canvas-webgl",
+            "responsive"
+          ]
+        },
+        "viewport": {
+          "$ref": "#/$defs/viewport"
+        },
+        "states": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "preconditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/step"
+          }
+        },
+        "captures": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/capture"
+          }
+        },
+        "status": {
+          "enum": [
+            "planned",
+            "in_progress",
+            "captured",
+            "blocked",
+            "failed",
+            "verified"
+          ]
+        },
+        "capturedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "resume": {
+          "$ref": "#/$defs/resume"
+        },
+        "attempts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/attempt"
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unknown"
+          }
+        }
+      }
+    }
+  }
+}

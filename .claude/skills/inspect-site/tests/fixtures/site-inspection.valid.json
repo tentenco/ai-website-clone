@@ -1,0 +1,125 @@
+{
+  "$schema": "../schemas/site-inspection.schema.json",
+  "schemaVersion": "1.0.0",
+  "target": "example-store",
+  "captures": [
+    {
+      "schemaVersion": "1.0.0",
+      "adapter": "agent-browser@0.33.0",
+      "source": {
+        "url": "https://example.com/products?sort=new",
+        "route": "/products?sort=new",
+        "referrer": ""
+      },
+      "capturedAt": "2026-07-29T01:02:03.000Z",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 2,
+        "orientation": "landscape",
+        "reducedMotion": "no-preference",
+        "colorScheme": "light",
+        "hasTouch": false
+      },
+      "scenario": "desktop-initial",
+      "evidenceLevel": "measured",
+      "styleProperties": [
+        "display",
+        "color"
+      ],
+      "document": {
+        "title": "Example products",
+        "traversal": "flat-preorder-all-elements"
+      },
+      "breakpoints": [
+        {
+          "query": "(min-width: 64rem)",
+          "matches": true
+        }
+      ],
+      "nodes": [
+        {
+          "id": 0,
+          "parent": null,
+          "selector": "html",
+          "tag": "html",
+          "attributes": {
+            "lang": "en"
+          },
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 1800
+          },
+          "visible": true,
+          "style": [
+            "block",
+            "rgb(20, 20, 20)"
+          ]
+        }
+      ],
+      "states": [],
+      "assets": [
+        {
+          "kind": "video",
+          "selector": "#hero-video",
+          "url": "https://example.com/hero.mp4",
+          "poster": "https://example.com/hero-poster.avif"
+        }
+      ],
+      "telemetry": {
+        "scroll": {
+          "x": 0,
+          "y": 0,
+          "scrollWidth": 1440,
+          "scrollHeight": 1800,
+          "clientWidth": 1440,
+          "clientHeight": 900
+        },
+        "resources": [],
+        "animations": [],
+        "media": [],
+        "canvas": [],
+        "webgl": []
+      },
+      "unknowns": []
+    }
+  ],
+  "findings": [
+    {
+      "level": "measured",
+      "claim": "The hero is 720px tall at the desktop viewport.",
+      "source": {
+        "url": "https://example.com/products?sort=new",
+        "capturedAt": "2026-07-29T01:02:03.000Z",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "deviceScaleFactor": 2,
+          "reducedMotion": "no-preference",
+          "colorScheme": "light",
+          "hasTouch": false
+        },
+        "scenario": "desktop-initial",
+        "selector": "#hero",
+        "artifact": "docs/design-references/example-store/desktop-initial/initial.png"
+      },
+      "measurement": {
+        "name": "heroHeight",
+        "value": 720,
+        "unit": "px"
+      }
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "tablet-menu-threshold",
+      "question": "At what exact width does the desktop menu collapse?",
+      "impact": "The navigation component contract cannot be frozen.",
+      "status": "resolved",
+      "resolution": "Binary search measured the transition at 1024px."
+    }
+  ]
+}

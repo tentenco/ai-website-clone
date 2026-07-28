@@ -1,0 +1,186 @@
+{
+  "schemaVersion": "1.0.0",
+  "adapter": "agent-browser@0.33.0",
+  "source": {
+    "url": "https://example.com/products?sort=new",
+    "route": "/products?sort=new",
+    "referrer": ""
+  },
+  "capturedAt": "2026-07-29T01:02:03.000Z",
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "deviceScaleFactor": 2,
+    "orientation": "landscape",
+    "reducedMotion": "no-preference",
+    "colorScheme": "light",
+    "hasTouch": false
+  },
+  "scenario": "desktop-initial",
+  "evidenceLevel": "measured",
+  "styleProperties": [
+    "display",
+    "color"
+  ],
+  "document": {
+    "title": "Example products",
+    "traversal": "flat-preorder-all-elements"
+  },
+  "breakpoints": [
+    {
+      "query": "(min-width: 64rem)",
+      "matches": true
+    }
+  ],
+  "nodes": [
+    {
+      "id": 0,
+      "parent": null,
+      "selector": "html",
+      "tag": "html",
+      "attributes": {
+        "lang": "en"
+      },
+      "text": "",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 1800
+      },
+      "visible": true,
+      "style": [
+        "block",
+        "rgb(20, 20, 20)"
+      ]
+    },
+    {
+      "id": 1,
+      "parent": 0,
+      "selector": "#hero",
+      "tag": "section",
+      "attributes": {
+        "id": "hero"
+      },
+      "text": "New arrivals",
+      "rect": {
+        "x": 0,
+        "y": 80,
+        "width": 1440,
+        "height": 720
+      },
+      "visible": true,
+      "style": [
+        "block",
+        "rgb(255, 255, 255)"
+      ],
+      "pseudo": {
+        "before": {
+          "style": [
+            "block",
+            "rgb(255, 255, 255)"
+          ]
+        }
+      }
+    }
+  ],
+  "states": [
+    {
+      "selector": "#hero",
+      "values": [
+        "hover"
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "kind": "image",
+      "selector": "#hero img",
+      "url": "https://example.com/hero-1440.avif",
+      "srcset": "/hero-720.avif 720w, /hero-1440.avif 1440w"
+    },
+    {
+      "kind": "pictureSource",
+      "selector": "#hero source",
+      "url": "https://example.com/hero-1440.avif",
+      "media": "(min-width: 64rem)"
+    },
+    {
+      "kind": "cssUrl",
+      "selector": "#hero",
+      "property": "mask-image",
+      "url": "https://example.com/hero-mask.svg"
+    },
+    {
+      "kind": "lottie",
+      "selector": "lottie-player",
+      "url": "https://example.com/hero-motion.json"
+    },
+    {
+      "kind": "rive",
+      "selector": "rive-player",
+      "url": "https://example.com/hero.riv"
+    },
+    {
+      "kind": "canvas",
+      "selector": "#hero-canvas",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "kind": "webgl",
+      "selector": "#hero-canvas",
+      "contextType": "webgl2",
+      "width": 1440,
+      "height": 900
+    }
+  ],
+  "telemetry": {
+    "scroll": {
+      "x": 0,
+      "y": 0,
+      "scrollWidth": 1440,
+      "scrollHeight": 1800,
+      "clientWidth": 1440,
+      "clientHeight": 900
+    },
+    "resources": [
+      {
+        "name": "https://example.com/hero-1440.avif",
+        "initiatorType": "img",
+        "startTime": 12.4,
+        "duration": 18.2
+      }
+    ],
+    "animations": [
+      {
+        "selector": "#hero",
+        "playState": "running",
+        "currentTime": 250
+      }
+    ],
+    "media": [],
+    "canvas": [
+      {
+        "sequence": 1,
+        "selector": "#hero-canvas",
+        "contextType": "webgl2"
+      }
+    ],
+    "webgl": [
+      {
+        "sequence": 2,
+        "selector": "#hero-canvas",
+        "contextType": "webgl2"
+      }
+    ]
+  },
+  "unknowns": [
+    {
+      "id": "closed-shadow-root",
+      "question": "Does the product carousel use a closed shadow root?",
+      "impact": "Internal carousel structure cannot be measured from the current capture.",
+      "status": "open"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "0.9.0",
+  "target": "Example Store",
+  "captures": [
+    {
+      "schemaVersion": "1.0.0",
+      "source": {
+        "url": "not a url"
+      },
+      "capturedAt": "yesterday",
+      "viewport": {
+        "width": 0,
+        "height": 900,
+        "deviceScaleFactor": 0
+      },
+      "scenario": "desktop-initial",
+      "evidenceLevel": "certain",
+      "styleProperties": [
+        "display",
+        "color"
+      ],
+      "document": {},
+      "breakpoints": [],
+      "nodes": [
+        {
+          "id": 0,
+          "parent": null,
+          "selector": "html",
+          "tag": "html",
+          "attributes": {},
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 100,
+            "height": 100
+          },
+          "visible": true,
+          "style": [
+            "block"
+          ]
+        }
+      ],
+      "states": [],
+      "assets": [],
+      "telemetry": {
+        "scroll": {},
+        "resources": [],
+        "animations": [],
+        "media": [],
+        "canvas": [],
+        "webgl": []
+      },
+      "unknowns": []
+    }
+  ],
+  "findings": [
+    {
+      "level": "guessed",
+      "claim": "",
+      "source": {
+        "url": "https://example.com",
+        "capturedAt": "2026-07-29T01:02:03.000Z",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "deviceScaleFactor": 2
+        },
+        "scenario": "desktop-initial"
+      }
+    }
+  ],
+  "unknowns": []
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "target": "example-store",
+  "source": {
+    "url": "https://example.com"
+  },
+  "createdAt": "2026-07-29T02:00:00.000Z",
+  "updatedAt": "2026-07-29T01:00:00.000Z",
+  "scenarios": [
+    {
+      "id": "desktop-initial",
+      "route": "/",
+      "family": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 2
+      },
+      "states": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "navigate"
+        }
+      ],
+      "captures": [
+        {
+          "id": "initial-probe",
+          "kind": "domProbe",
+          "path": "capture.json",
+          "afterStep": "missing-step"
+        }
+      ],
+      "status": "captured",
+      "capturedAt": null,
+      "resume": {
+        "completedStepIds": [
+          "missing-step"
+        ],
+        "nextStepId": "also-missing"
+      },
+      "attempts": [],
+      "evidence": [
+        {
+          "level": "certain",
+          "claim": "Unsupported evidence label"
+        }
+      ],
+      "unknowns": []
+    }
+  ],
+  "unknowns": []
+}

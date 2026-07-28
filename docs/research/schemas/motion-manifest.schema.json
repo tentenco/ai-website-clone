@@ -1,0 +1,925 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tenten.co/schemas/motion-manifest.schema.json",
+  "title": "Website motion manifest",
+  "description": "Evidence-labeled visible motion, synchronized telemetry, implementation readings, fallbacks, unknowns, and QA checkpoints for one deterministic website capture target.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "target",
+    "sources",
+    "telemetry",
+    "events",
+    "responsiveFallbacks",
+    "reducedMotionFallback",
+    "unknowns",
+    "implementationReading",
+    "qaCheckpoints"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "target": {
+      "$ref": "#/$defs/target"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/sourceAsset"
+      }
+    },
+    "telemetry": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/telemetry"
+      }
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/motionEvent"
+      }
+    },
+    "responsiveFallbacks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/responsiveFallback"
+      }
+    },
+    "reducedMotionFallback": {
+      "$ref": "#/$defs/reducedMotionFallback"
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/unknown"
+      }
+    },
+    "implementationReading": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/implementationReading"
+      }
+    },
+    "qaCheckpoints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/qaCheckpoint"
+      }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "evidenceLevel": {
+      "enum": [
+        "measured",
+        "observed",
+        "inferred",
+        "invented"
+      ]
+    },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "deviceScaleFactor": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slug",
+        "url",
+        "capturedAt",
+        "scenario",
+        "viewport"
+      ],
+      "properties": {
+        "slug": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "scenario": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "runId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "viewport": {
+          "$ref": "#/$defs/viewport"
+        },
+        "prefersReducedMotion": {
+          "enum": [
+            "no-preference",
+            "reduce"
+          ]
+        }
+      }
+    },
+    "mediaMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "durationSeconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "frameRate": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "codec": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "pixelFormat": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "sourceAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "sha256",
+        "bytes"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "kind": {
+          "enum": [
+            "source-video",
+            "deterministic-recording",
+            "contact-sheet",
+            "screenshot",
+            "telemetry",
+            "other"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "media": {
+          "$ref": "#/$defs/mediaMetadata"
+        },
+        "redistribution": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "path"
+          ]
+        },
+        {
+          "required": [
+            "url"
+          ]
+        }
+      ]
+    },
+    "evidenceSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "capturedAt",
+        "viewport",
+        "scenario",
+        "artifact"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "viewport": {
+          "$ref": "#/$defs/viewport"
+        },
+        "scenario": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "selector": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "artifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "timeSeconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "scrollPx": {
+          "type": "number"
+        },
+        "scrollProgress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "tolerance": {
+          "type": "number",
+          "minimum": 0
+        },
+        "samplingIntervalMs": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "level",
+        "claim",
+        "source"
+      ],
+      "properties": {
+        "level": {
+          "$ref": "#/$defs/evidenceLevel"
+        },
+        "claim": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "source": {
+          "$ref": "#/$defs/evidenceSource"
+        },
+        "measurement": {
+          "$ref": "#/$defs/measurement"
+        }
+      }
+    },
+    "telemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "artifact",
+        "sha256",
+        "capturedAt",
+        "clock"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "kind": {
+          "enum": [
+            "dom",
+            "scroll",
+            "media",
+            "canvas",
+            "webgl",
+            "network",
+            "actions",
+            "synchronization"
+          ]
+        },
+        "artifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "clock": {
+          "enum": [
+            "performance",
+            "video",
+            "media",
+            "wall",
+            "mixed"
+          ]
+        },
+        "samplingIntervalMs": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "notes": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "timeRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "startSeconds",
+        "endSeconds"
+      ],
+      "properties": {
+        "startSeconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "endSeconds": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "scrollRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "container",
+        "axis"
+      ],
+      "properties": {
+        "container": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "axis": {
+          "enum": [
+            "x",
+            "y"
+          ]
+        },
+        "startPx": {
+          "type": "number"
+        },
+        "endPx": {
+          "type": "number"
+        },
+        "startProgress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "endProgress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "clamp": {
+          "type": "boolean"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "startPx",
+            "endPx"
+          ]
+        },
+        {
+          "required": [
+            "startProgress",
+            "endProgress"
+          ]
+        }
+      ]
+    },
+    "trigger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "load",
+            "time",
+            "scroll-position",
+            "scroll-progress",
+            "intersection",
+            "hover",
+            "focus",
+            "pointer",
+            "click",
+            "media-time",
+            "resize",
+            "custom"
+          ]
+        },
+        "selector": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "value": {},
+        "threshold": {
+          "type": "number"
+        },
+        "telemetryRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "propertyObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target",
+        "property",
+        "value"
+      ],
+      "properties": {
+        "target": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "property": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "value": {},
+        "unit": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "tolerance": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "stateSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "properties"
+      ],
+      "properties": {
+        "label": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "properties": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/propertyObservation"
+          }
+        }
+      }
+    },
+    "timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "delayMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "durationMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "easing": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "staggerMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "iterations": {
+          "oneOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "const": "infinite"
+            }
+          ]
+        }
+      }
+    },
+    "eventFallbacks": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "responsive": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/responsiveFallback"
+          }
+        },
+        "reducedMotion": {
+          "$ref": "#/$defs/reducedMotionFallback"
+        }
+      }
+    },
+    "motionEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "mode",
+        "evidence",
+        "trigger",
+        "stateA",
+        "stateB",
+        "timing",
+        "telemetryRefs",
+        "unknownRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "label": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "mode": {
+          "enum": [
+            "continuous",
+            "discrete"
+          ]
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "time": {
+          "$ref": "#/$defs/timeRange"
+        },
+        "scroll": {
+          "$ref": "#/$defs/scrollRange"
+        },
+        "trigger": {
+          "$ref": "#/$defs/trigger"
+        },
+        "stateA": {
+          "$ref": "#/$defs/stateSnapshot"
+        },
+        "stateB": {
+          "$ref": "#/$defs/stateSnapshot"
+        },
+        "timing": {
+          "$ref": "#/$defs/timing"
+        },
+        "telemetryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "unknownRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "fallbacks": {
+          "$ref": "#/$defs/eventFallbacks"
+        },
+        "notes": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "time"
+          ]
+        },
+        {
+          "required": [
+            "scroll"
+          ]
+        }
+      ]
+    },
+    "responsiveFallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "condition",
+        "behavior",
+        "evidence"
+      ],
+      "properties": {
+        "condition": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "behavior": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "eventRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      }
+    },
+    "reducedMotionFallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "behavior",
+        "details",
+        "evidence"
+      ],
+      "properties": {
+        "behavior": {
+          "enum": [
+            "preserve-essential-state",
+            "shorten",
+            "disable",
+            "replace",
+            "unknown"
+          ]
+        },
+        "details": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "eventRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      }
+    },
+    "unknown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "question",
+        "impact",
+        "status",
+        "eventRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "question": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "impact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "status": {
+          "enum": [
+            "open",
+            "accepted",
+            "resolved"
+          ]
+        },
+        "eventRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "resolution": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "implementationReading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "eventRefs",
+        "level",
+        "claim",
+        "mechanism",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "eventRefs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "level": {
+          "$ref": "#/$defs/evidenceLevel"
+        },
+        "claim": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "mechanism": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "proposedEngine": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "builderGuidance": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "checkpointPosition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "timeSeconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "scrollPx": {
+          "type": "number"
+        },
+        "scrollProgress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "state": {
+          "enum": [
+            "A",
+            "B",
+            "intermediate"
+          ]
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "timeSeconds"
+          ]
+        },
+        {
+          "required": [
+            "scrollPx"
+          ]
+        },
+        {
+          "required": [
+            "scrollProgress"
+          ]
+        },
+        {
+          "required": [
+            "state"
+          ]
+        }
+      ]
+    },
+    "qaCheckpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "eventRef",
+        "at",
+        "expected",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "eventRef": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "at": {
+          "$ref": "#/$defs/checkpointPosition"
+        },
+        "expected": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/propertyObservation"
+          }
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "artifact": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "artifactSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "dependentRequired": {
+        "artifact": [
+          "artifactSha256"
+        ],
+        "artifactSha256": [
+          "artifact"
+        ]
+      }
+    }
+  }
+}
