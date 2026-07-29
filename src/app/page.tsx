@@ -3,7 +3,7 @@ export default function Home() {
     <main className="flex min-h-screen items-center justify-center px-6">
       <div className="max-w-xl space-y-3 text-center">
         <p className="text-sm font-medium tracking-[0.2em] text-muted-foreground uppercase">
-          Tenten Website Clone Engine
+          AI Website Clone Engine
         </p>
         <h1 className="text-3xl font-semibold tracking-tight">
           Evidence in. Fidelity out.

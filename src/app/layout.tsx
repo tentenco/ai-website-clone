@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tenten Website Clone Engine",
+  title: "AI Website Clone Engine",
   description:
     "Evidence-driven website reconstruction, motion analysis, and fidelity QA.",
 };

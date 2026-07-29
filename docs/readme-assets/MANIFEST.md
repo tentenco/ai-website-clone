@@ -1,6 +1,6 @@
 # README Visual Manifest
 
-These assets were generated for Tenten Website Clone Engine through the
+These assets were generated for AI Website Clone Engine through the
 authenticated Higgsfield CLI.
 
 ## Generation contract

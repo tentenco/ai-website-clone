@@ -1,9 +1,9 @@
 {
-  "name": "tenten-website-clone-engine",
-  "version": "0.1.0",
+  "name": "ai-website-clone-engine",
+  "version": "0.1.1",
   "private": true,
   "description": "Evidence-driven AI workflow for website reconstruction, motion analysis, and deterministic fidelity QA",
-  "author": "Tenten",
+  "author": "AI Website Clone Engine contributors",
   "license": "MIT",
   "repository": {
     "type": "git",

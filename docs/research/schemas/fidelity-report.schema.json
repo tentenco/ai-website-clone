@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://tenten.co/schemas/fidelity-report.schema.json",
+  "$id": "urn:ai-website-clone-engine:schema:fidelity-report:1.0.0",
   "title": "Website clone fidelity report",
   "description": "Evidence-backed static, responsive, interaction, asset, motion, accessibility, and runtime acceptance results for one clone target.",
   "type": "object",

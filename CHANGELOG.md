@@ -1,11 +1,23 @@
 # Changelog
 
-All notable changes to Tenten Website Clone Engine are documented here.
+All notable changes to AI Website Clone Engine are documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 the project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.1.1] - 2026-07-29
+
+### Added
+
+- Evidence-based comparison scorecard and prioritized optimization roadmap.
+
+### Changed
+
+- Renamed the project to AI Website Clone Engine across product, package,
+  documentation, schema, container, release, and community surfaces.
+- Replaced organization-led attribution with contributor-led project identity.
 
 ## [0.1.0] - 2026-07-29
 
@@ -32,5 +44,6 @@ the project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Rebuilt the project identity, documentation, metadata, and public repository
   around the evidence-driven workflow.
 
-[Unreleased]: https://github.com/tentenco/ai-website-clone/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/tentenco/ai-website-clone/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/tentenco/ai-website-clone/releases/tag/v0.1.1
 [0.1.0]: https://github.com/tentenco/ai-website-clone/releases/tag/v0.1.0

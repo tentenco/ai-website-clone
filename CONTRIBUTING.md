@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve Tenten Website Clone Engine. Contributions are welcome
+Thanks for helping improve AI Website Clone Engine. Contributions are welcome
 across inspection adapters, evidence contracts, motion analysis, fidelity QA,
 documentation, and the Next.js scaffold.
 
