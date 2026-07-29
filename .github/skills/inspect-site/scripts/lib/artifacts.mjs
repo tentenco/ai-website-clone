@@ -572,6 +572,121 @@ function validateScenario(scenario, path, check) {
   validateUnknowns(scenario.unknowns, `${path}/unknowns`, check);
 }
 
+function validateResponsiveStateCoverage(boundaries, scenarios, path, check) {
+  if (boundaries === undefined) return;
+  if (!arrayAt(boundaries, path, check)) return;
+
+  const boundaryIds = new Set();
+  boundaries.forEach((boundary, boundaryIndex) => {
+    const boundaryPath = `${path}/${boundaryIndex}`;
+    if (!objectAt(boundary, boundaryPath, check)) return;
+
+    if (!stringAt(boundary.id, `${boundaryPath}/id`, check) || !SLUG.test(boundary.id)) {
+      check.add(`${boundaryPath}/id`, "must be a lowercase hyphenated slug");
+    } else if (boundaryIds.has(boundary.id)) {
+      check.add(`${boundaryPath}/id`, "must be unique within responsiveStateCoverage");
+    } else {
+      boundaryIds.add(boundary.id);
+    }
+
+    stringAt(boundary.route, `${boundaryPath}/route`, check);
+    if (!Number.isInteger(boundary.width) || boundary.width < 2) {
+      check.add(`${boundaryPath}/width`, "must be an integer greater than 1");
+    }
+
+    const captureWidths = Array.isArray(boundary.captureWidths)
+      ? boundary.captureWidths
+      : [];
+    if (arrayAt(boundary.captureWidths, `${boundaryPath}/captureWidths`, check, 3)) {
+      const uniqueWidths = new Set();
+      captureWidths.forEach((width, widthIndex) => {
+        if (!Number.isInteger(width) || width < 1) {
+          check.add(
+            `${boundaryPath}/captureWidths/${widthIndex}`,
+            "must be a positive integer",
+          );
+        } else if (uniqueWidths.has(width)) {
+          check.add(
+            `${boundaryPath}/captureWidths/${widthIndex}`,
+            "must be unique",
+          );
+        }
+        uniqueWidths.add(width);
+      });
+
+      if (Number.isInteger(boundary.width) && boundary.width >= 2) {
+        for (const requiredWidth of [
+          boundary.width - 1,
+          boundary.width,
+          boundary.width + 1,
+        ]) {
+          if (!uniqueWidths.has(requiredWidth)) {
+            check.add(
+              `${boundaryPath}/captureWidths`,
+              `must include breakpoint-adjacent width ${requiredWidth}`,
+            );
+          }
+        }
+      }
+    }
+
+    if (
+      !arrayAt(
+        boundary.stateFamilies,
+        `${boundaryPath}/stateFamilies`,
+        check,
+        1,
+      )
+    ) {
+      return;
+    }
+
+    boundary.stateFamilies.forEach((stateFamily, familyIndex) => {
+      const familyPath = `${boundaryPath}/stateFamilies/${familyIndex}`;
+      if (!objectAt(stateFamily, familyPath, check)) return;
+      if (!SCENARIO_FAMILIES.has(stateFamily.family)) {
+        check.add(`${familyPath}/family`, "must be a supported scenario family");
+      }
+      if (!arrayAt(stateFamily.states, `${familyPath}/states`, check, 1)) return;
+
+      const requiredStates = new Set();
+      stateFamily.states.forEach((state, stateIndex) => {
+        if (typeof state !== "string" || state.length === 0) {
+          check.add(`${familyPath}/states/${stateIndex}`, "must be a non-empty string");
+        } else if (requiredStates.has(state)) {
+          check.add(`${familyPath}/states/${stateIndex}`, "must be unique");
+        }
+        requiredStates.add(state);
+      });
+
+      if (
+        typeof boundary.route !== "string" ||
+        !SCENARIO_FAMILIES.has(stateFamily.family)
+      ) {
+        return;
+      }
+
+      for (const width of captureWidths.filter(Number.isInteger)) {
+        const matchingScenario = scenarios.find(
+          (scenario) =>
+            isObject(scenario) &&
+            scenario.route === boundary.route &&
+            scenario.family === stateFamily.family &&
+            scenario.viewport?.width === width &&
+            Array.isArray(scenario.states) &&
+            [...requiredStates].every((state) => scenario.states.includes(state)),
+        );
+        if (!matchingScenario) {
+          check.add(
+            `${familyPath}/states`,
+            `missing ${stateFamily.family} scenario at ${width}px on ${boundary.route} with states: ${[...requiredStates].join(", ")}`,
+          );
+        }
+      }
+    });
+  });
+}
+
 export function validateCaptureScenarios(artifact) {
   const check = collector();
   if (!objectAt(artifact, "", check)) return check.result();
@@ -603,6 +718,12 @@ export function validateCaptureScenarios(artifact) {
       }
     });
   }
+  validateResponsiveStateCoverage(
+    artifact.responsiveStateCoverage,
+    Array.isArray(artifact.scenarios) ? artifact.scenarios : [],
+    "/responsiveStateCoverage",
+    check,
+  );
   validateUnknowns(artifact.unknowns, "/unknowns", check);
   return combineValidation(
     validateAgainstSchema(artifact, CAPTURE_SCENARIOS_SCHEMA),

@@ -46,7 +46,8 @@ order, and computed-style vector length.
 ## Capture scenarios
 
 `capture-scenarios.json` is an execution ledger, not prose. The top level records
-the target, source, creation/update times, scenarios, and cross-scenario unknowns.
+the target, source, creation/update times, scenarios, optional responsive state
+coverage, and cross-scenario unknowns.
 Every scenario records:
 
 - stable `id`, `route`, `family`, and complete viewport/environment including
@@ -72,6 +73,24 @@ Persist this sequence:
    the exact error. Resume with a new attempt.
 
 See `tests/fixtures/capture-scenarios.valid.json` for a complete minimal example.
+
+### Responsive state coverage
+
+Use top-level `responsiveStateCoverage` when a measured boundary changes a
+stateful surface. Each boundary records:
+
+- a stable `id`, route, and measured threshold `width`;
+- `captureWidths` containing the exact `width - 1`, `width`, and `width + 1`;
+- affected scenario families and the settled states each family must capture;
+- a short evidence pointer when available.
+
+The semantic validator requires one matching scenario per route, family, and
+capture width whose `states` include the full declared set. This prevents a static
+tablet screenshot from standing in for a tablet navigation state, and prevents
+desktop/mobile menu captures from silently leaving an intermediate mode untested.
+State names should distinguish the panel shell from nested disclosure outcomes,
+for example `menu-open-settled`, `nested-disclosures-collapsed`, and
+`products-disclosure-expanded`.
 
 ## Raw capture and site inspection
 

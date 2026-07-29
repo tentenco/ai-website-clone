@@ -85,6 +85,8 @@ scenarios for:
 - hover, focus, keyboard, and touch;
 - loading, empty, and error states;
 - desktop, tablet, mobile, and discovered breakpoints;
+- affected state families at `breakpoint - 1`, `breakpoint`, and
+  `breakpoint + 1`, declared through `responsiveStateCoverage`;
 - reduced motion;
 - media, canvas, WebGL, parallax, and scroll-scrub telemetry.
 
@@ -200,7 +202,8 @@ Replay the same source and clone scenarios. Verify:
 - static checkpoints and key geometry;
 - typography, color, assets, and layering;
 - responsive layouts and discovered breakpoints;
-- every required interactive state;
+- every required interactive state, including settled nested-disclosure states
+  at each declared breakpoint-adjacent width;
 - motion timing, scroll progress, trajectories, and fallback behavior;
 - keyboard, touch, and reduced motion;
 - lint, typecheck, build, runtime routes, and asset decoding.

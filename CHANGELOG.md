@@ -7,6 +7,17 @@ the project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Machine-validated responsive state coverage for breakpoint-adjacent
+  navigation, disclosure, and other stateful scenario families.
+
+### Changed
+
+- Inspection and QA skills now distinguish settled panel, collapsed-child, and
+  expanded-child states instead of treating a single open-menu capture as
+  complete responsive interaction coverage.
+
 ## [0.1.1] - 2026-07-29
 
 ### Added
