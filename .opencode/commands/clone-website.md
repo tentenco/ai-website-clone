@@ -63,6 +63,11 @@ Record:
 - static, interaction, motion, accessibility, performance, build, and runtime
   gates.
 
+In `clone` mode, primary-navigation disclosure states — dropdown and mega-menu
+panels and the mobile menu — are in scope by default and belong in required
+states. Excluding them requires an explicit, recorded approval in the contract;
+never descope them silently.
+
 Create `REFERENCE_LEDGER.md` for multiple sources. Stop on unresolved authority,
 rights, or scope conflicts.
 
@@ -134,6 +139,18 @@ Before any builder starts:
 No builder may infer a missing color, asset, breakpoint, state, trigger, duration,
 or content string.
 
+Specification hygiene, enforced before freezing:
+
+- Write texture and background attribution as invariants that name the carrier
+  element and its never-conditions ("the dot tile lives on the wrapper
+  background; it never appears behind card text"), not as vague quantifiers
+  ("some cells have a pattern"). Vague quantifiers force builders to guess.
+- Record asset references as complete, replayable URLs. An abbreviated hash or
+  truncated path forces the builder to re-derive evidence or invent a substitute.
+- Cross-check quantity claims across artifacts: a topology that promises 28
+  cells while the content inventory names 25 is a specification defect to fix
+  before dispatch, not a builder judgment call.
+
 ## Stage 5: Build with Agent Harness
 
 Keep shared foundation and integration with the root orchestrator.
@@ -148,6 +165,18 @@ When parallel work is useful:
 5. prohibit descendants and unrelated edits;
 6. require the smallest useful checks and a committed handoff;
 7. merge one branch at a time and verify after every merge.
+
+Every executor packet carries the current known-pitfall boundaries, stated as
+rules rather than history. Seed the list from prior QA rounds and grow it
+whenever verification catches a new defect class. Boundaries that have already
+paid for themselves:
+
+- standard breakpoint variants only — arbitrary `min-[...]` variants have
+  ordering pitfalls against standard breakpoints in Tailwind-based setups;
+- no network-dependent steps inside sandboxed executors: font fetching, full
+  production builds, and runtime capture belong to the orchestrator whenever the
+  executor cannot reach the network or bind local ports. Declare this gate
+  division in the packet instead of discovering it in the failure report.
 
 Prefer server-rendered sections. Add the narrowest browser controller that can
 reproduce the measured interaction. Select implementation from evidence:
@@ -224,3 +253,6 @@ Do not call the work complete until:
 - Blending references before a baseline or provenance ledger exists.
 - Treating a builder report, local build, preview, or open browser tab as final
   delivery proof.
+- Treating the capture window's width as the source's maximum layout width.
+- Accepting an executor delivery because the build passed, without rendering the
+  result and measuring the layout it actually produced.
