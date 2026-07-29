@@ -2,7 +2,7 @@
 
 ## Our commitment
 
-We are committed to making participation in Tenten Website Clone Engine a
+We are committed to making participation in AI Website Clone Engine a
 respectful, harassment-free experience for everyone, regardless of background,
 identity, experience level, or role.
 

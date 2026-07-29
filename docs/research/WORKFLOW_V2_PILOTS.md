@@ -1,7 +1,7 @@
 # Workflow V2 Pilot Validation
 
 Date: 2026-07-29  
-Branch: `tenten/workflow-v2`
+Validation track: `workflow-v2-pilots`
 
 These pilots forward-test the skills as a user would use them. They are workflow
 validation, not approval of the referenced client sites or implementations.

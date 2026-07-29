@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://tenten.co/schemas/motion-manifest.schema.json",
+  "$id": "urn:ai-website-clone-engine:schema:motion-manifest:1.0.0",
   "title": "Website motion manifest",
   "description": "Evidence-labeled visible motion, synchronized telemetry, implementation readings, fallbacks, unknowns, and QA checkpoints for one deterministic website capture target.",
   "type": "object",

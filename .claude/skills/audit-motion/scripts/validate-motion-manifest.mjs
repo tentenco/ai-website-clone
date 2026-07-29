@@ -784,7 +784,7 @@ async function main() {
   const options = parseArgs(process.argv.slice(2));
   const { value: schema } = parseJson(options.schema, "motion schema");
   if (
-    schema.$id !== "https://tenten.co/schemas/motion-manifest.schema.json"
+    schema.$id !== "urn:ai-website-clone-engine:schema:motion-manifest:1.0.0"
     || schema.properties?.schemaVersion?.const !== "1.0.0"
   ) {
     throw new Error("motion schema has an unexpected id or version");
