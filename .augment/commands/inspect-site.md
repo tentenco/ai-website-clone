@@ -58,6 +58,13 @@ scenario `in_progress` before acting. After each checkpoint, write the completed
 step IDs and artifact paths. Append an attempt record with the exact browser
 adapter and version on success or failure.
 
+When a stateful surface changes at a responsive boundary, add
+`responsiveStateCoverage` to the scenario artifact. For each measured boundary,
+declare its route, threshold width, the exact `width - 1`, `width`, and
+`width + 1` capture widths, plus every affected scenario family and settled state.
+The validator requires a matching scenario at all three widths. A static tablet
+screenshot does not cover an opened navigation or accordion state at tablet width.
+
 Do not combine all routes, breakpoints, and interactions in one browser task.
 Resume from the last persisted checkpoint, not from memory.
 
@@ -72,6 +79,9 @@ Resume from the last persisted checkpoint, not from memory.
    changes; capture immediately below, at, and above that boundary when meaningful.
 4. Add discovered viewports to the scenario artifact before capturing their states.
    Record source query, measured threshold, and conflicting evidence separately.
+   If the boundary affects a menu, disclosure, tab, carousel, dialog, or other
+   stateful family, declare it in `responsiveStateCoverage` and replay that family's
+   settled states at all three boundary-adjacent widths.
 5. Probe layout boundaries in code, not only on screen. Read container and grid
    rules from `document.styleSheets`: `max-width`, grid templates, and the CSS
    custom properties that define gutters, page margins, and column formulas.
@@ -105,7 +115,11 @@ For each scenario:
    navigation, and disclosure trigger; hover and click each one; capture the
    opened panel's DOM, content, and computed styles. Mega-menus frequently mount
    only on interaction — absence from the initial DOM is not evidence that a menu
-   does not exist, and `aria-expanded` markers may be missing entirely.
+   does not exist, and `aria-expanded` markers may be missing entirely. Wait for
+   entrance and disclosure motion to settle, then record the default closed-child
+   state and every mutually exclusive expanded child. Never treat a transition
+   frame or a panel with every nested group accidentally expanded as the final
+   open state.
 6. Evaluate `scripts/browser-probe.js` with the scenario ID set. It traverses all
    document and open-shadow-root elements in flat preorder, preserving parent IDs
    without depth or child caps. It records computed-style vectors, generated

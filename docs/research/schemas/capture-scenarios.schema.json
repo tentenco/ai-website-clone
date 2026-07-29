@@ -43,6 +43,13 @@
         "$ref": "#/$defs/scenario"
       }
     },
+    "responsiveStateCoverage": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/responsiveStateBoundary"
+      }
+    },
     "unknowns": {
       "type": "array",
       "items": {
@@ -337,6 +344,85 @@
         },
         "resolution": {
           "type": "string"
+        }
+      }
+    },
+    "stateFamilyCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family",
+        "states"
+      ],
+      "properties": {
+        "family": {
+          "enum": [
+            "initial",
+            "full-page",
+            "scroll",
+            "navigation",
+            "interaction",
+            "hover-focus",
+            "loading-empty-error",
+            "reduced-motion",
+            "media",
+            "canvas-webgl",
+            "responsive"
+          ]
+        },
+        "states": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "responsiveStateBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "route",
+        "width",
+        "captureWidths",
+        "stateFamilies"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "route": {
+          "type": "string",
+          "minLength": 1
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "captureWidths": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "stateFamilies": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/stateFamilyCoverage"
+          }
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },

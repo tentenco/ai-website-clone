@@ -93,9 +93,17 @@ viewport and one interaction family:
 Persist each scenario immediately. Do not combine every route, breakpoint, and
 interaction into one long browser task.
 
+When a responsive boundary affects a stateful family, declare
+`responsiveStateCoverage` and capture that family's settled states at the exact
+boundary width and one pixel on either side. Desktop and mobile interaction
+captures do not cover an intermediate navigation or disclosure mode.
+
 ### Stage 3: Evidence extraction
 
 - Inspect all relevant viewports, including discovered breakpoints.
+- Replay every affected state family immediately below, at, and above each
+  measured responsive boundary; distinguish panel-open from nested-disclosure
+  collapsed and expanded states.
 - Capture pseudo-elements, CSS variables, font faces, media queries, and state
   changes.
 - Inventory responsive images, video sources, posters, manifests, CSS masks,
@@ -123,6 +131,8 @@ interaction into one long browser task.
 ### Stage 6: QA
 
 - Replay the same capture scenarios against source and clone.
+- Validate responsive state coverage before replay; missing boundary-adjacent
+  scenarios block the affected gate.
 - Compare static checkpoints with masks for truly dynamic regions.
 - Compare motion using event timing, scroll progress, transform trajectories, and
   human review rather than full-frame pixel diff alone.
@@ -154,4 +164,3 @@ Projects may tighten these values in the clone contract.
 - No inaccessible essential content when JavaScript, animation, or motion is
   unavailable.
 - No unreviewed `invented` behavior in `clone` mode.
-

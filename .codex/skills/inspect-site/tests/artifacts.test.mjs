@@ -63,6 +63,95 @@ describe("artifact validation", () => {
     assert.match(messages, /measured, observed, inferred, or invented/);
   });
 
+  test("requires settled state-family coverage around responsive boundaries", async () => {
+    const artifact = await fixture("capture-scenarios.valid.json");
+    const baseScenario = artifact.scenarios[0];
+    artifact.scenarios = [990, 991, 992].map((width) => ({
+      ...structuredClone(baseScenario),
+      id: `navigation-${width}`,
+      family: "navigation",
+      viewport: {
+        ...baseScenario.viewport,
+        width,
+      },
+      states: [
+        "menu-open-settled",
+        "nested-disclosures-collapsed",
+        "products-disclosure-expanded",
+      ],
+    }));
+    artifact.responsiveStateCoverage = [
+      {
+        id: "navigation-991",
+        route: "/products",
+        width: 991,
+        captureWidths: [990, 991, 992],
+        stateFamilies: [
+          {
+            family: "navigation",
+            states: [
+              "menu-open-settled",
+              "nested-disclosures-collapsed",
+              "products-disclosure-expanded",
+            ],
+          },
+        ],
+        evidence: "Measured source layout transition",
+      },
+    ];
+
+    assert.deepEqual(validateCaptureScenarios(artifact), {
+      valid: true,
+      errors: [],
+    });
+
+    const missingBoundaryScenario = structuredClone(artifact);
+    missingBoundaryScenario.scenarios = missingBoundaryScenario.scenarios.filter(
+      (scenario) => scenario.viewport.width !== 991,
+    );
+    const missingScenarioResult = validateCaptureScenarios(
+      missingBoundaryScenario,
+    );
+    assert.equal(missingScenarioResult.valid, false);
+    assert(
+      missingScenarioResult.errors.some(
+        (error) =>
+          error.path ===
+            "/responsiveStateCoverage/0/stateFamilies/0/states" &&
+          error.message.includes("missing navigation scenario at 991px"),
+      ),
+    );
+
+    const missingSettledState = structuredClone(artifact);
+    missingSettledState.scenarios[0].states =
+      missingSettledState.scenarios[0].states.filter(
+        (state) => state !== "nested-disclosures-collapsed",
+      );
+    const missingStateResult = validateCaptureScenarios(missingSettledState);
+    assert.equal(missingStateResult.valid, false);
+    assert(
+      missingStateResult.errors.some((error) =>
+        error.message.includes("nested-disclosures-collapsed"),
+      ),
+    );
+
+    const missingAdjacentWidth = structuredClone(artifact);
+    missingAdjacentWidth.responsiveStateCoverage[0].captureWidths = [
+      989,
+      990,
+      991,
+    ];
+    const missingWidthResult = validateCaptureScenarios(missingAdjacentWidth);
+    assert.equal(missingWidthResult.valid, false);
+    assert(
+      missingWidthResult.errors.some(
+        (error) =>
+          error.path === "/responsiveStateCoverage/0/captureWidths" &&
+          error.message.includes("breakpoint-adjacent width 992"),
+      ),
+    );
+  });
+
   test("enforces canonical schema additional-property boundaries", async () => {
     const capture = await fixture("capture.valid.json");
     const scenarios = await fixture("capture-scenarios.valid.json");
@@ -138,6 +227,10 @@ describe("bundled contracts", () => {
     ]);
     assert(scenarioSchema.$defs.scenario.required.includes("resume"));
     assert(scenarioSchema.$defs.scenario.required.includes("capturedAt"));
+    assert.equal(
+      scenarioSchema.properties.responsiveStateCoverage.items.$ref,
+      "#/$defs/responsiveStateBoundary",
+    );
   });
 
   test("browser scripts compile and the probe declares lossless flat traversal", async () => {

@@ -21,6 +21,9 @@ Read, in authority order:
 Stop and mark the affected gate `blocked` if its scenario, acceptance threshold,
 source artifact, permission, or specification authority is missing. Preserve the
 evidence levels from `docs/research/EVIDENCE_MODEL.md`.
+Validate `capture-scenarios.json` before replay. When the inspection records
+`responsiveStateCoverage`, missing breakpoint-adjacent family scenarios are a
+blocked evidence gate, not permission to infer the state from desktop or mobile.
 
 ## Workflow
 
@@ -34,7 +37,9 @@ evidence levels from `docs/research/EVIDENCE_MODEL.md`.
    typography, colors, asset identity/decode, visibility, stacking, and layout at
    every contracted viewport. Measure rendered layout — computed grid template,
    column count, and cell dimensions — rather than trusting a passing build;
-   compilation proves nothing about geometry.
+   compilation proves nothing about geometry. Replay affected state families at
+   every declared `width - 1`, `width`, and `width + 1` boundary capture; an
+   initial-state screenshot cannot pass an open-disclosure gate.
 4. **Bound dynamic pixels.** Freeze dynamic content when possible. Otherwise use
    the smallest reviewed `exclude` or `separate-review` mask. Read
    [dynamic-regions.md](references/dynamic-regions.md). Masked pixels provide no
@@ -44,9 +49,11 @@ evidence levels from `docs/research/EVIDENCE_MODEL.md`.
    interaction and motion checkpoints. Read
    [motion-qa.md](references/motion-qa.md). Open every navigation disclosure from
    its trigger and compare panel content against the evidence inventory item by
-   item. With the pointer resting on horizontally scrollable components, verify
-   vertical page scroll still works — native scroll-snap tracks can trap wheel
-   input that the source site does not.
+   item. Compare the settled panel shell, default nested-disclosure state, each
+   exclusive expanded child, close/reset behavior, and keyboard/touch state at
+   every responsive width declared for that family. With the pointer resting on
+   horizontally scrollable components, verify vertical page scroll still works —
+   native scroll-snap tracks can trap wheel input that the source site does not.
 6. **Check resilience.** Verify keyboard access, essential content without
    animation, reduced-motion behavior, asset decode, lint, typecheck, build,
    runtime routes, and public assets.
