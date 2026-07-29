@@ -73,6 +73,18 @@ Resume from the last persisted checkpoint, not from memory.
    changes; capture immediately below, at, and above that boundary when meaningful.
 4. Add discovered viewports to the scenario artifact before capturing their states.
    Record source query, measured threshold, and conflicting evidence separately.
+5. Probe layout boundaries in code, not only on screen. Read container and grid
+   rules from `document.styleSheets`: `max-width`, grid templates, and the CSS
+   custom properties that define gutters, page margins, and column formulas.
+   When the site uses utility-class CSS, harvest the class attributes of key
+   layout nodes — breakpoint-conditional classes (`lg:`, `2xl:`, …) document
+   responsive behavior that no single-width capture can reveal.
+6. Capture computed styles for headline and container elements at two or more
+   widths to separate fluid values from fixed ones. The capture window's width is
+   never evidence of the maximum layout width: fluid containers often cap far
+   above common capture widths, and the physical monitor limits how far a real
+   window can widen. Beyond the display, rely on stylesheet evidence or device
+   emulation and label the finding `measured`.
 
 ## 4. Capture one scenario
 
@@ -90,18 +102,36 @@ For each scenario:
 4. Execute one interaction step at a time. Capture before and after hover, focus,
    pressed, open, selected, disabled, loading, empty, and error states. Include
    keyboard and touch variants where the contract requires them.
-5. Evaluate `scripts/browser-probe.js` with the scenario ID set. It traverses all
+5. Inventory interactive chrome before leaving a route. Enumerate every header,
+   navigation, and disclosure trigger; hover and click each one; capture the
+   opened panel's DOM, content, and computed styles. Mega-menus frequently mount
+   only on interaction — absence from the initial DOM is not evidence that a menu
+   does not exist, and `aria-expanded` markers may be missing entirely.
+6. Evaluate `scripts/browser-probe.js` with the scenario ID set. It traverses all
    document and open-shadow-root elements in flat preorder, preserving parent IDs
    without depth or child caps. It records computed-style vectors, generated
    pseudo-elements, geometry, state flags, CSS variables, media queries, and assets.
-6. Pair the probe with network evidence and scroll lazy regions into view. Account
+7. Pair the probe with network evidence and scroll lazy regions into view. Account
    for `src`, `currentSrc`, `srcset`, `<picture>`, video/audio sources and posters,
    tracks, CSS URLs and masks, manifests, font faces, Lottie JSON, Rive files,
    canvas contexts, WebGL contexts, and lazy-loaded resources.
-7. Persist the raw capture immediately at
+8. Persist the raw capture immediately at
    `docs/research/<target>/captures/<scenario-id>.json`, validate it, then update the
    scenario status and resume fields. Preserve partial artifacts when a later step
    fails.
+
+Browser interference notes:
+
+- `scroll-behavior: smooth` can silently defeat programmatic `scrollTo`; set
+  `document.documentElement.style.scrollBehavior = "auto"` for deterministic
+  jumps and restore it afterwards.
+- Lazy videos rarely load during scripted scrolls. Trigger playback or harvest
+  poster and stream URLs from network telemetry instead of trusting screenshots.
+- Scroll-reveal implementations often duplicate heading text in the DOM;
+  deduplicate before building content inventories.
+- Emit structured summaries (lengths, tile sizes, resolved colors) instead of raw
+  `data:` URIs; automation privacy filters may block outputs that echo encoded
+  payloads.
 
 ## 5. Classify findings
 
